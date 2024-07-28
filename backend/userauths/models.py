@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models.signals import post_save
 
-# Create your models here.
 
 class User(AbstractUser):
     username = models.CharField(max_length=100, unique=True)
@@ -22,7 +22,7 @@ class User(AbstractUser):
             self.full_name == email_username
         if self.username == "" or self.username is None:
             self.username = email_username
-            
+
         super(User, self).save()
 
 class Profile(models.Model):
@@ -41,3 +41,14 @@ class Profile(models.Model):
             self.full_name == self.user.username
 
         super(Profile, self).save()
+
+
+def create_user_profile(sender, instance, created, *args, **kwargs):
+    if created:
+        Profile.objects.create(user=instance, )
+
+def save_user_profile(sender, instance, *args, **kwargs):
+    instance.profile.save()
+
+post_save.connect(create_user_profile, sender=User)
+post_save.connect(save_user_profile, sender=User)
