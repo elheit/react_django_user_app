@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { mountStoreDevtool } from "simple-zustand-devtools";
 
-const useAuthStore = create((set, get) => ({
+export const useAuthStore = create((set, get) => ({
   allUserData: null,
   loading: false,
 
@@ -14,12 +14,10 @@ const useAuthStore = create((set, get) => ({
     set({
       allUserData: user,
     }),
-  setLOading: (loading) => set({ loading }),
+  setLoading: (loading) => set({ loading }),
   isLoggedIn: () => get().allUserData !== null,
 }));
 
 if (import.meta.env.DEV) {
   mountStoreDevtool("StoreAuth", useAuthStore);
 }
-
-export { useAuthStore };
