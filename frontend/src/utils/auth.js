@@ -57,7 +57,7 @@ export const setUser = async () => {
   const refresh_token = Cookie.get("refresh_token");
 
   if (!access_token || !refresh_token) {
-    alert("Tokens does not exists");
+    // alert("Tokens does not exists");
     return;
   }
   if (isAccessTokenExpired(access_token)) {
@@ -83,12 +83,12 @@ export const setAuthUser = (access_token, refresh_token) => {
   if (user) {
     useAuthStore.getState().setUser(user);
   }
-  setAuthUser.getState().setLoading(false);
+  useAuthStore.getState().setLoading(false);
 };
 
 export const getRefreshedToken = async () => {
   const refresh_token = Cookie.get("refresh_token");
-  const response = await apiInstance.post("token/refresh/", {
+  const response = await apiInstance.post("user/token/refresh/", {
     refresh: refresh_token,
   });
   return response.data;
